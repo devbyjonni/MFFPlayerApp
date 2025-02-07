@@ -46,6 +46,7 @@ build/
 # Add this if you're using SPM
 .build/
 .swiftpm/
+.swiftpm/xcode/package.xcworkspace/
 
 ### Xcode Patch ###
 *.xcodeproj/*
@@ -55,6 +56,7 @@ build/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
+*.xcworkspace  # Ensures all Xcode Workspaces are ignored
 
 ## CocoaPods
 # Add this if you're using CocoaPods
@@ -83,3 +85,7 @@ Package.resolved
 ## Secrets folder
 # Ignore the Secrets folder where sensitive files (like API keys) are stored
 Secrets/
+Secrets/*
+MFFPlayerApp/Secrets/
+MFFPlayerApp/Secrets/*
+MFFPlayerApp/APIConfig.swift
