@@ -40,27 +40,22 @@ final class PlayerEntity: Identifiable {
     }
 }
 
-/// Represents the API response structure for fetching player data.
-/// The `players` property contains an array of `Player` objects.
+//// Represents the API response structure for fetching player data.
 struct PlayerResponse: Decodable {
     let players: [Player]
 }
 
 /// Represents a player as returned by the API.
-/// This model is strictly used for network data transfer and decoding.
-///
-/// - Conforms to `Codable` for JSON parsing.
-/// - Implements `Identifiable` to be compatible with SwiftUI lists.
 struct Player: Codable, Identifiable {
-    /// Unique identifier for the player, derived from their jersey number.
-    var id: String { number }
-    
+    /// Unique identifier for the player, derived from the jersey number.
+    var id: String { number } // Ensures SwiftUI compatibility
+
     /// Player's full name.
     let name: String
-    
+
     /// Jersey number assigned to the player.
     let number: String
-    
-    /// URL or file path of the player's image.
+
+    /// URL of the player's image.
     let image: String
 }

@@ -12,6 +12,7 @@ enum APIError: Error, LocalizedError {
     case serverError(statusCode: Int)
     case decodingError(String)
     case networkError(Error)
+    case unauthorized
     
     var errorDescription: String? {
         switch self {
@@ -23,27 +24,64 @@ enum APIError: Error, LocalizedError {
             return "Decoding error: \(message)"
         case .networkError(let error):
             return "Network error: \(error.localizedDescription)"
+        case .unauthorized:
+            return "Unauthorized - Invalid credentials"
         }
     }
 }
 
 protocol APIServiceProtocol {
-    func fetchData<T: Decodable>(from urlString: String) async throws -> T
+    func getToken(username: String, password: String) async throws -> String
+    func fetchData<T: Decodable>(from urlString: String, token: String) async throws -> T
 }
 
 final class APIService: APIServiceProtocol {
     static let shared = APIService()
     private init() {}
-
-    func fetchData<T: Decodable>(from urlString: String) async throws -> T {
+    
+    /// Request a JWT Token
+    func getToken(username: String, password: String) async throws -> String {
+        guard let url = URL(string: "\(APIConfig.baseURL)/token") else {
+            throw APIError.invalidURL
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let bodyString = "username=\(username)&password=\(password)"
+        request.httpBody = bodyString.data(using: .utf8)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+                throw APIError.unauthorized
+            }
+            
+            let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
+            return tokenResponse.access_token
+        } catch {
+            throw APIError.networkError(error)
+        }
+    }
+    
+    /// Fetch Data Using Token
+    func fetchData<T: Decodable>(from urlString: String, token: String) async throws -> T {
         guard let url = URL(string: urlString) else {
             throw APIError.invalidURL
         }
         
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
-
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+                throw APIError.unauthorized
+            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
                 throw APIError.serverError(statusCode: httpResponse.statusCode)
             }
 
@@ -52,4 +90,10 @@ final class APIService: APIServiceProtocol {
             throw APIError.decodingError(error.localizedDescription)
         }
     }
+}
+
+/// Model for Token Response
+struct TokenResponse: Decodable {
+    let access_token: String
+    let token_type: String
 }
