@@ -55,14 +55,14 @@ final class APIService: APIServiceProtocol {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
                 throw APIError.unauthorized
             }
             
             let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
             return tokenResponse.access_token
         } catch {
-            throw APIError.networkError(error)
+            throw APIError.decodingError(error.localizedDescription)
         }
     }
     
@@ -84,7 +84,7 @@ final class APIService: APIServiceProtocol {
             } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
                 throw APIError.serverError(statusCode: httpResponse.statusCode)
             }
-
+            
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
             throw APIError.decodingError(error.localizedDescription)
@@ -92,8 +92,4 @@ final class APIService: APIServiceProtocol {
     }
 }
 
-/// Model for Token Response
-struct TokenResponse: Decodable {
-    let access_token: String
-    let token_type: String
-}
+

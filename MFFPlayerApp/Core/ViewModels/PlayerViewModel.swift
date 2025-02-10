@@ -5,18 +5,20 @@ import SwiftData
 @MainActor
 @Observable
 final class PlayerViewModel {
-    private let database: DatabaseActor
+    private let databaseManager: DatabaseManager
     private(set) var isLoading = false
-    private var token: String?
+    private let userSession: UserSession
     
-    init(database: DatabaseActor) {
-        self.database = database
+    
+    init(databaseManager: DatabaseManager, userSession: UserSession) {
+        self.databaseManager = databaseManager
+        self.userSession = userSession  // ✅ Store reference
     }
     
     /// Load players from database or API if necessary
     func loadPlayers() async {
         do {
-            let storedPlayers = try await database.fetchPlayers()
+            let storedPlayers = try await databaseManager.fetchPlayers()
             if !storedPlayers.isEmpty {
                 logMessage("✅ Players already exist in database, skipping fetch.")
                 return
@@ -37,20 +39,29 @@ final class PlayerViewModel {
     
     /// Authenticate and fetch player data
     private func authenticateAndFetchPlayers() async {
+        
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
         
         do {
-            logMessage("🔑 Requesting authentication token...")
-            let token = try await APIService.shared.getToken(username: APIConfig.apiUsername, password: APIConfig.apiPassword)
-            self.token = token
-            logMessage("✅ Successfully authenticated.")
+            // ✅ Ensure user is authenticated
+            guard userSession.isAuthenticated else {
+                logMessage("❌ User is not authenticated. Redirecting to login.")
+                return
+            }
             
             logMessage("🔄 Fetching player data from API...")
+            
+            // ✅ Use stored JWT token from UserSession
+            guard let token = userSession.token else {
+                logMessage("❌ Missing authentication token.")
+                return
+            }
+            
             let playerResponse: PlayerResponse = try await APIService.shared.fetchData(from: APIConfig.playersEndpoint, token: token)
             
-            try await database.clearAndSavePlayers(players: playerResponse.players)
+            try await databaseManager.clearAndSavePlayers(players: playerResponse.players)
             logMessage("✅ Successfully updated players from API.")
         } catch {
             logMessage("❌ Error updating players: \(error.localizedDescription)")

@@ -1,5 +1,5 @@
 //
-//  DatabaseActor.swift
+//  DatabaseManager.swift
 //  MFFPlayerApp
 //
 //  Created by Jonni Akesson on 2025-02-08.
@@ -8,11 +8,11 @@
 import SwiftData
 
 @ModelActor
-public actor DatabaseActor {
+public actor DatabaseManager {
     func fetchPlayers() async throws -> [PlayerEntity] {
         return try modelContext.fetch(FetchDescriptor<PlayerEntity>())
     }
-    /// Save new players and clear old ones to SwiftData
+
     func clearAndSavePlayers(players: [Player]) async throws {
         let existingPlayers = try modelContext.fetch(FetchDescriptor<PlayerEntity>())
         for player in existingPlayers {

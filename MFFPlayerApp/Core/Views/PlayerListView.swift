@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  PlayerListView.swift
 //  MFFPlayerApp
 //
 //  Created by Jonni Akesson on 2025-02-07.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct PlayerListView: View {
     @Query(sort: \PlayerEntity.name) private var storedPlayers: [PlayerEntity]
     @State var viewModel: PlayerViewModel
     

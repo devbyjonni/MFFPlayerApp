@@ -11,12 +11,14 @@ import SwiftData
 @main
 struct MFFPlayerAppApp: App {
     let container: ModelContainer
-    private var databaseActor: DatabaseActor
+    private var databaseManager: DatabaseManager
+    
+    @State private var userSession = UserSession()
     
     init() {
         do {
             container = try ModelContainer(for: PlayerEntity.self)
-            databaseActor = DatabaseActor(modelContainer: container)
+            databaseManager = DatabaseManager(modelContainer: container)
         } catch {
             fatalError("Failed to initialize ModelContainer: \(error)")
         }
@@ -24,11 +26,20 @@ struct MFFPlayerAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: PlayerViewModel(database: databaseActor))
-                .modelContainer(container)
-                .onAppear {
-                    printDatabaseLocation()
-                }
+            if userSession.isAuthenticated {
+                PlayerListView(viewModel: PlayerViewModel(databaseManager: databaseManager, userSession: userSession))
+                    .modelContainer(container)
+                    .environment(userSession)
+                    .onAppear {
+                        printDatabaseLocation()
+                    }
+            } else {
+                LoginView()
+                    .environment(userSession)
+                    .onAppear {
+                        printDatabaseLocation()
+                    }
+            }
         }
     }
     
@@ -40,4 +51,3 @@ struct MFFPlayerAppApp: App {
         }
     }
 }
-
