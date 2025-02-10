@@ -12,7 +12,6 @@ import SwiftData
 struct MFFPlayerAppApp: App {
     let container: ModelContainer
     private var databaseManager: DatabaseManager
-    
     @State private var userSession = UserSession()
     
     init() {
@@ -26,21 +25,39 @@ struct MFFPlayerAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if userSession.isAuthenticated {
-                PlayerListView(viewModel: PlayerViewModel(databaseManager: databaseManager, userSession: userSession))
-                    .modelContainer(container)
-                    .environment(userSession)
-                    .onAppear {
-                        printDatabaseLocation()
+            NavigationStack {
+                VStack {
+                    if userSession.isAuthenticated {
+                        PlayerListView(viewModel: PlayerViewModel(databaseManager: databaseManager, userSession: userSession))
+                            .modelContainer(container)
+                            .environment(userSession)
+                    } else {
+                        LoginView()
+                            .environment(userSession)
                     }
-            } else {
-                LoginView()
-                    .environment(userSession)
-                    .onAppear {
-                        printDatabaseLocation()
+                }
+                .navigationTitle("MFF Players")
+                .navigationBarTitleDisplayMode(.inline)
+                .onAppear {
+                    printDatabaseLocation()
+                }
+                .toolbar {
+                    if userSession.isAuthenticated {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: logout) {
+                                Text("Logout")
+                                    .foregroundColor(.blue)
+                            }
+                            
+                        }
                     }
+                }
             }
         }
+    }
+    
+    private func logout() {
+        userSession.logout()
     }
     
     private func printDatabaseLocation() {

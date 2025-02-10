@@ -16,7 +16,7 @@ final class UserSession {
         }
     }
     
-    var token: String? // Store JWT token
+    var token: String?
     
     func login(username: String, password: String) async {
         do {
@@ -31,6 +31,7 @@ final class UserSession {
     }
     
     func logout() {
+        print("🚪 Logging out...")
         isAuthenticated = false
         token = nil
     }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LoginView: View {
     @Environment(UserSession.self) private var userSession
-    
     @State private var username = ""
     @State private var password = ""
     @State private var errorMessage: String?
@@ -56,7 +55,7 @@ struct LoginView: View {
         .padding()
     }
     
-    func login() {
+    private func login() {
         guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Username and password are required"
             return
