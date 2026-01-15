@@ -5,13 +5,14 @@ import Observation
 @Observable
 final class PlayerViewModel {
     private let databaseManager: DatabaseManager
+    private let apiService: APIServiceProtocol
     private(set) var isLoading = false
-    private let userSession: UserSession
+    var errorMessage: String?
     
-    
-    init(databaseManager: DatabaseManager, userSession: UserSession) {
+    // Default to APIService.shared for convenience, but allow injection for tests
+    init(databaseManager: DatabaseManager, apiService: APIServiceProtocol = APIService.shared) {
         self.databaseManager = databaseManager
-        self.userSession = userSession  // ✅ Store reference
+        self.apiService = apiService
     }
     
     /// Load players from database or API if necessary
@@ -24,8 +25,9 @@ final class PlayerViewModel {
             }
             
             logMessage("⚠️ No players found in database, fetching from API...")
-            await authenticateAndFetchPlayers()
+            await fetchPlayersFromAPI()
         } catch {
+            errorMessage = "Failed to load players: \(error.localizedDescription)"
             logMessage("❌ Error fetching players: \(error.localizedDescription)")
         }
     }
@@ -33,42 +35,32 @@ final class PlayerViewModel {
     /// Check for updates from API and refresh database
     func checkForUpdates() async {
         logMessage("🚀 Checking for updates from API...")
-        await authenticateAndFetchPlayers()
+        await fetchPlayersFromAPI()
     }
     
-    /// Authenticate and fetch player data
-    private func authenticateAndFetchPlayers() async {
-        
+    /// Fetch player data from API
+    private func fetchPlayersFromAPI() async {
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
         
         do {
-            // ✅ Ensure user is authenticated
-            guard userSession.isAuthenticated else {
-                logMessage("❌ User is not authenticated. Redirecting to login.")
-                return
-            }
-            
             logMessage("🔄 Fetching player data from API...")
             
-            // ✅ Use stored JWT token from UserSession
-            guard let token = userSession.token else {
-                logMessage("❌ Missing authentication token.")
-                return
-            }
+            // ✅ Fetch [Player] directly (no wrapper)
+            let players: [Player] = try await apiService.fetchData(from: APIConfig.playersEndpoint)
             
-            let playerResponse: PlayerResponse = try await APIService.shared.fetchData(from: APIConfig.playersEndpoint, token: token)
-            
-            try await databaseManager.clearAndSavePlayers(players: playerResponse.players)
+            try await databaseManager.clearAndSavePlayers(players: players)
             logMessage("✅ Successfully updated players from API.")
         } catch {
+            errorMessage = "Failed to update: \(error.localizedDescription)"
             logMessage("❌ Error updating players: \(error.localizedDescription)")
         }
     }
     
     /// Simple log function for debugging
     private func logMessage(_ message: String) {
-        NSLog("\(message)")
+        // Using print for now, willing to upgrade to Logger later
+        print("PlayerViewModel: \(message)")
     }
 }

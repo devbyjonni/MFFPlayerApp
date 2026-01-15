@@ -31,57 +31,28 @@ enum APIError: Error, LocalizedError {
 }
 
 protocol APIServiceProtocol {
-    func getToken(username: String, password: String) async throws -> String
-    func fetchData<T: Decodable>(from urlString: String, token: String) async throws -> T
+    func fetchData<T: Decodable>(from urlString: String) async throws -> T
 }
 
 final class APIService: APIServiceProtocol {
     static let shared = APIService()
     private init() {}
     
-    /// Request a JWT Token
-    func getToken(username: String, password: String) async throws -> String {
-        guard let url = URL(string: "\(APIConfig.baseURL)/token") else {
-            throw APIError.invalidURL
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        
-        let bodyString = "username=\(username)&password=\(password)"
-        request.httpBody = bodyString.data(using: .utf8)
-        
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                throw APIError.unauthorized
-            }
-            
-            let tokenResponse = try JSONDecoder().decode(TokenResponse.self, from: data)
-            return tokenResponse.access_token
-        } catch {
-            throw APIError.decodingError(error.localizedDescription)
-        }
-    }
-    
-    /// Fetch Data Using Token
-    func fetchData<T: Decodable>(from urlString: String, token: String) async throws -> T {
+    /// Fetch Data (No Auth)
+    func fetchData<T: Decodable>(from urlString: String) async throws -> T {
         guard let url = URL(string: urlString) else {
             throw APIError.invalidURL
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        // request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") // Auth removed
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 401 {
-                throw APIError.unauthorized
-            } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                // If 401 happened, it would mean server still requires auth, but we assume it's public now
                 throw APIError.serverError(statusCode: httpResponse.statusCode)
             }
             

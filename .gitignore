@@ -88,4 +88,14 @@ Secrets/
 Secrets/*
 MFFPlayerApp/Secrets/
 MFFPlayerApp/Secrets/*
-MFFPlayerApp/APIConfig.swift
+
+# NO LONGER SECRET (Simplified App)
+# MFFPlayerApp/APIConfig.swift
+
+### Python ###
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
