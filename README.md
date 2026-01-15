@@ -2,11 +2,11 @@
 A **SwiftUI app** that fetches and displays **Malmö FF player data** from a custom Python backend (FastAPI), using **BeautifulSoup** for scraping and **SwiftData** for local persistence.
 
 ## Features
-✅ Fetches real-time **Malmö FF player data** via Python Backend
-✅ Displays player **name, number, and image**
-✅ Uses **SwiftUI List & AsyncImage** for a native look
-✅ Caches player data locally using **SwiftData** for offline access
-✅ **Pull-to-refresh** support
+- Fetches real-time **Malmö FF player data** via Python Backend
+- Displays player **name, number, and image**
+- Uses **SwiftUI List & AsyncImage** for a native look
+- Caches player data locally using **SwiftData** for offline access
+- **Pull-to-refresh** support
 
 ---
 
@@ -25,7 +25,7 @@ A **SwiftUI app** that fetches and displays **Malmö FF player data** from a cus
 ---
 
 ## How It Works
-1️⃣ **Backend Scrapes Data**: `scraper.py` reads `mff.se` html.
-2️⃣ **App Fetches Data**: `PlayerViewModel` requests `GET /players`.
-3️⃣ **Persistence**: Data is saved to `SwiftData` allows offline viewing.
+1. **Backend Scrapes Data**: `scraper.py` parses `mff.se` HTML.
+2. **App Fetches Data**: `PlayerViewModel` requests `GET /players`.
+3. **Persistence**: Data is saved to `SwiftData` for offline viewing.
 
