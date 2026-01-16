@@ -1,5 +1,8 @@
-#  MFFPlayerApp
-A **SwiftUI app** that fetches and displays **Malmö FF player data** from a custom Python backend (FastAPI), using **BeautifulSoup** for scraping and **SwiftData** for local persistence.
+#  MFFPlayerApp 📱⚽️
+
+![Status](https://img.shields.io/badge/Status-Work_in_Progress-yellow)
+
+A **native iOS application** built with modern Swift technologies to track Malmö FF players, designed with scalable architecture and premium UI in mind.
 
 ## Features
 - **Live Scraping**: Python backend extracts real-time player data from MFF.se.
@@ -15,7 +18,10 @@ A **SwiftUI app** that fetches and displays **Malmö FF player data** from a cus
 - **SwiftUI** (`List`, `@Observable`, `@Query`)
 - **SwiftData** for persistent local storage
 - **Swift Concurrency** (`async`/`await`)
-- **MVVM Architecture**
+- **MVVM + Clean Architecture**:
+  - **Features**: View + ViewModels (Presentation Layer)
+  - **Data**: Network & Storage Services (Data Layer)
+  - **Models**: Shared Domain Entities (Domain Layer)
 
 ### Backend (Python)
 - **FastAPI** for serving data
