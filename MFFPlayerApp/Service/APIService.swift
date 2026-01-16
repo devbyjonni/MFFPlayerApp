@@ -32,6 +32,25 @@ enum APIError: Error, LocalizedError {
 
 protocol APIServiceProtocol {
     func fetchData<T: Decodable>(from urlString: String) async throws -> T
+    func fetchDetails(from urlString: String, url: String) async throws -> PlayerDetails
+}
+
+// Response Models
+struct PlayerDetailsRequest: Encodable {
+    let url: String
+}
+
+struct PlayerDetails: Decodable {
+    let bio: String
+    let dob: String
+    let position: String
+    
+    // Stats
+    let stats_games: Int
+    let stats_goals: Int
+    let stats_assists: Int
+    let stats_yellow: Int
+    let stats_red: Int
 }
 
 final class APIService: APIServiceProtocol {
@@ -59,6 +78,32 @@ final class APIService: APIServiceProtocol {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
             throw APIError.decodingError(error.localizedDescription)
+        }
+    }
+    
+    /// Fetch Details (POST)
+    func fetchDetails(from urlString: String, url: String) async throws -> PlayerDetails {
+        guard let apiURL = URL(string: urlString) else {
+            throw APIError.invalidURL
+        }
+        
+        var request = URLRequest(url: apiURL)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body = PlayerDetailsRequest(url: url)
+        request.httpBody = try JSONEncoder().encode(body)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                throw APIError.serverError(statusCode: httpResponse.statusCode)
+            }
+            
+            return try JSONDecoder().decode(PlayerDetails.self, from: data)
+        } catch {
+             throw APIError.networkError(error)
         }
     }
 }

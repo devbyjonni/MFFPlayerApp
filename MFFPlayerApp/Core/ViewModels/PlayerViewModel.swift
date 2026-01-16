@@ -38,6 +38,41 @@ final class PlayerViewModel {
         await fetchPlayersFromAPI()
     }
     
+    /// Fetch detailed info for a specific player (Entity)
+    func fetchDetails(for player: PlayerEntity) async {
+        guard player.bio == nil else { return } // Already have details
+        
+        do {
+            logMessage("🔍 Fetching details for \(player.name)...")
+            
+            // PlayerEntity.id IS the details_url
+            let details: PlayerDetails = try await apiService.fetchDetails(from: APIConfig.detailsEndpoint, url: player.id)
+            
+            // Update the player in the database
+            try await databaseManager.updatePlayerDetails(
+                id: player.id, 
+                bio: details.bio, 
+                dob: details.dob, 
+                position: details.position,
+                stats_games: details.stats_games,
+                stats_goals: details.stats_goals,
+                stats_assists: details.stats_assists,
+                stats_yellow: details.stats_yellow,
+                stats_red: details.stats_red
+            )
+            
+            // Force UI refresh isn't strictly needed for the detail view if it observes the same object, 
+            // but refreshing the list ensures consistency. 
+            // However, with SwiftData/CoreData, modifying the object should update the view automatically if observed.
+            // But since we are inside an Actor (DatabaseManager) and referencing an Entity on the MainActor (View), 
+            // we rely on the Actor to save contexts.
+            
+            logMessage("✅ details loaded for \(player.name)")
+        } catch {
+             logMessage("❌ Error fetching details: \(error.localizedDescription)")
+        }
+    }
+
     /// Fetch player data from API
     private func fetchPlayersFromAPI() async {
         guard !isLoading else { return }

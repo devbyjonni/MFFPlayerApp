@@ -33,6 +33,27 @@ def get_players():
         raise HTTPException(status_code=500, detail="Failed to fetch players")
     return players
 
+class PlayerDetailsRequest(BaseModel):
+    url: str
+
+class PlayerDetails(BaseModel):
+    bio: str
+    dob: str
+    position: str
+    stats_games: int
+    stats_goals: int
+    stats_assists: int
+    stats_yellow: int
+    stats_red: int
+
+@app.post("/players/details", response_model=PlayerDetails)
+def get_details(request: PlayerDetailsRequest):
+    logger.info(f"Request received for details: {request.url}")
+    details = scraper.get_player_details(request.url)
+    if not details:
+        raise HTTPException(status_code=500, detail="Failed to fetch details")
+    return details
+
 @app.post("/token", response_model=Token)
 def login():
     # Mock authentication to satisfy the iOS App's requirement

@@ -32,7 +32,7 @@ struct MFFPlayerAppApp: App {
                 .navigationTitle("MFF Players")
                 .navigationBarTitleDisplayMode(.inline)
                 .onAppear {
-                    printDatabaseLocation()
+                   // printDatabaseLocation()
                 }
                 .toolbar {
                 }

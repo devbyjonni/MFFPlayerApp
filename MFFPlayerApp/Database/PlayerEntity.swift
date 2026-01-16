@@ -22,6 +22,18 @@ final class PlayerEntity: Identifiable {
     /// URL or file path for the player's image.
     var image: String
     
+    // Details
+    var bio: String?
+    var dob: String?
+    var position: String?
+    
+    // Stats
+    var stats_games: Int?
+    var stats_goals: Int?
+    var stats_assists: Int?
+    var stats_yellow: Int?
+    var stats_red: Int?
+    
     /// Initializes a new `PlayerEntity` instance.
     ///
     /// - Parameters:
@@ -29,10 +41,21 @@ final class PlayerEntity: Identifiable {
     ///   - name: Player's full name.
     ///   - number: Jersey number.
     ///   - image: URL or file path for the player's image.
-    init(id: String, name: String, number: String, image: String) {
+    init(id: String, name: String, number: String, image: String, 
+         bio: String? = nil, dob: String? = nil, position: String? = nil,
+         stats_games: Int? = nil, stats_goals: Int? = nil, stats_assists: Int? = nil,
+         stats_yellow: Int? = nil, stats_red: Int? = nil) {
         self.id = id
         self.name = name
         self.number = number
         self.image = image
+        self.bio = bio
+        self.dob = dob
+        self.position = position
+        self.stats_games = stats_games
+        self.stats_goals = stats_goals
+        self.stats_assists = stats_assists
+        self.stats_yellow = stats_yellow
+        self.stats_red = stats_red
     }
 }

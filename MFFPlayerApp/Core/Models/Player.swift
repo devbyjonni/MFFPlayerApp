@@ -16,4 +16,16 @@ struct Player: Codable, Identifiable {
     let number: String
     let image: String
     let details_url: String
+    
+    // Detailed Info (Optional, fetched on demand)
+    var bio: String?
+    var dob: String?
+    var position: String?
+    
+    // Stats
+    var stats_games: Int?
+    var stats_goals: Int?
+    var stats_assists: Int?
+    var stats_yellow: Int?
+    var stats_red: Int?
 }
