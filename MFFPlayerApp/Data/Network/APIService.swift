@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - API Error
 enum APIError: Error, LocalizedError {
     case invalidURL
     case serverError(statusCode: Int)
@@ -30,12 +31,13 @@ enum APIError: Error, LocalizedError {
     }
 }
 
+// MARK: - Protocol
 protocol APIServiceProtocol {
     func fetchData<T: Decodable>(from urlString: String) async throws -> T
     func fetchDetails(from urlString: String, url: String) async throws -> PlayerDetails
 }
 
-// Response Models
+// MARK: - Response Models
 struct PlayerDetailsRequest: Encodable {
     let url: String
 }
@@ -53,11 +55,18 @@ struct PlayerDetails: Decodable {
     let stats_red: Int
 }
 
+// MARK: - API Service
 final class APIService: APIServiceProtocol {
+    
+    // MARK: - Singleton
     static let shared = APIService()
     private init() {}
     
-    /// Fetch Data (No Auth)
+    // MARK: - Fetch Methods
+    
+    /// Generic fetch method for GET requests using async/await.
+    /// - Parameter urlString: The absolute URL string to fetch from.
+    /// - Returns: Decoded object of type T.
     func fetchData<T: Decodable>(from urlString: String) async throws -> T {
         guard let url = URL(string: urlString) else {
             throw APIError.invalidURL
@@ -65,23 +74,27 @@ final class APIService: APIServiceProtocol {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        // request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") // Auth removed
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                // If 401 happened, it would mean server still requires auth, but we assume it's public now
+                // Return server error if status is not 200 OK
                 throw APIError.serverError(statusCode: httpResponse.statusCode)
             }
             
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
+            if let apiError = error as? APIError { throw apiError }
             throw APIError.decodingError(error.localizedDescription)
         }
     }
     
-    /// Fetch Details (POST)
+    /// Fetches detailed player information (Bio, Stats) via POST request.
+    /// - Parameters:
+    ///   - urlString: Endpoint URL.
+    ///   - url: The unique player URL identifier to scrape.
+    /// - Returns: `PlayerDetails` object.
     func fetchDetails(from urlString: String, url: String) async throws -> PlayerDetails {
         guard let apiURL = URL(string: urlString) else {
             throw APIError.invalidURL
@@ -91,6 +104,7 @@ final class APIService: APIServiceProtocol {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        // Encode the body with the target player URL
         let body = PlayerDetailsRequest(url: url)
         request.httpBody = try JSONEncoder().encode(body)
         
@@ -103,6 +117,7 @@ final class APIService: APIServiceProtocol {
             
             return try JSONDecoder().decode(PlayerDetails.self, from: data)
         } catch {
+            if let apiError = error as? APIError { throw apiError }
              throw APIError.networkError(error)
         }
     }
