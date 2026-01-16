@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import SwiftData
 @testable import MFFPlayerApp
 
 @MainActor
@@ -13,12 +14,12 @@ final class PlayerViewModelTests: XCTestCase {
     
     var viewModel: PlayerViewModel!
     var mockService: MockAPIService!
-    var databaseManager: DatabaseManager! // We need a real (or mock) DB
+    var databaseManager: DatabaseManager!
     
     override func setUp() async throws {
         mockService = MockAPIService()
         
-        // Creating an in-memory ModelContainer for testing SwiftData
+        // In-Memory DB for testing (Fast & Clean)
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: PlayerEntity.self, configurations: config)
         databaseManager = DatabaseManager(modelContainer: container)

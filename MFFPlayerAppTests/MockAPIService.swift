@@ -1,38 +1,15 @@
 //
-//  APIServiceTests.swift
+//  MockAPIService.swift
 //  MFFPlayerAppTests
 //
 //  Created by Jonni Akesson on 2025-02-13.
 //
 
-import XCTest
+import Foundation
 @testable import MFFPlayerApp
 
-final class APIServiceTests: XCTestCase {
-    
-    var apiService: APIServiceProtocol!
-    
-    override func setUp() {
-        super.setUp()
-        
-        // Setup configuration to use our Mock Protocol
-        let config = URLSessionConfiguration.ephemeral
-        config.protocolClasses = [MockURLProtocol.self]
-        let session = URLSession(configuration: config)
-        
-        // We'll init APIService with a custom session if we refactor APIService to accept it,
-        // BUT for now, since APIService uses URLSession.shared internally, 
-        // a pure Unit Test without DI is harder.
-        // ADAPTATION: We will create a "NetworkManager" or modify APIService to be testable.
-        // OR, we can mock the entire APIServiceProtocol in ViewModelTests (which is better).
-        
-        // Let's modify APIService to accept a URLSession first, to make it testable? 
-        // Actually, let's keep it simple for the recruiter showcase: 
-        // We will test `PlayerViewModel` using a MOCK APIService. That is cleaner.
-    }
-}
-
 // MARK: - Mock API Service
+// Note: No 'import XCTest' here so it is safe if accidentally added to App Target
 class MockAPIService: APIServiceProtocol {
     var shouldFail = false
     

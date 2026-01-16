@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		FAF5F7882F1A798800B1B01F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B683FD6A2D564093002FCA99 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B683FD712D564093002FCA99;
+			remoteInfo = MFFPlayerApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		B683FD722D564093002FCA99 /* MFFPlayerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MFFPlayerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAF5F7842F1A798800B1B01F /* MFFPlayerAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MFFPlayerAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = MFFPlayerApp;
 			sourceTree = "<group>";
 		};
+		FAF5F7852F1A798800B1B01F /* MFFPlayerAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MFFPlayerAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B683FD6F2D564093002FCA99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAF5F7812F1A798800B1B01F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				B683FD742D564093002FCA99 /* MFFPlayerApp */,
+				FAF5F7852F1A798800B1B01F /* MFFPlayerAppTests */,
 				B683FD732D564093002FCA99 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				B683FD722D564093002FCA99 /* MFFPlayerApp.app */,
+				FAF5F7842F1A798800B1B01F /* MFFPlayerAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = B683FD722D564093002FCA99 /* MFFPlayerApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FAF5F7832F1A798800B1B01F /* MFFPlayerAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAF5F78A2F1A798800B1B01F /* Build configuration list for PBXNativeTarget "MFFPlayerAppTests" */;
+			buildPhases = (
+				FAF5F7802F1A798800B1B01F /* Sources */,
+				FAF5F7812F1A798800B1B01F /* Frameworks */,
+				FAF5F7822F1A798800B1B01F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FAF5F7892F1A798800B1B01F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FAF5F7852F1A798800B1B01F /* MFFPlayerAppTests */,
+			);
+			name = MFFPlayerAppTests;
+			packageProductDependencies = (
+			);
+			productName = MFFPlayerAppTests;
+			productReference = FAF5F7842F1A798800B1B01F /* MFFPlayerAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -77,11 +125,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					B683FD712D564093002FCA99 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					FAF5F7832F1A798800B1B01F = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = B683FD712D564093002FCA99;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				B683FD712D564093002FCA99 /* MFFPlayerApp */,
+				FAF5F7832F1A798800B1B01F /* MFFPlayerAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B683FD702D564093002FCA99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAF5F7822F1A798800B1B01F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FAF5F7802F1A798800B1B01F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FAF5F7892F1A798800B1B01F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B683FD712D564093002FCA99 /* MFFPlayerApp */;
+			targetProxy = FAF5F7882F1A798800B1B01F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B683FD7E2D564094002FCA99 /* Debug */ = {
@@ -304,6 +379,50 @@
 			};
 			name = Release;
 		};
+		FAF5F78B2F1A798800B1B01F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y7Y6B46Y8X;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = devbyjonni.MFFPlayerAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFFPlayerApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MFFPlayerApp";
+			};
+			name = Debug;
+		};
+		FAF5F78C2F1A798800B1B01F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y7Y6B46Y8X;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = devbyjonni.MFFPlayerAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MFFPlayerApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MFFPlayerApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -321,6 +440,15 @@
 			buildConfigurations = (
 				B683FD812D564094002FCA99 /* Debug */,
 				B683FD822D564094002FCA99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAF5F78A2F1A798800B1B01F /* Build configuration list for PBXNativeTarget "MFFPlayerAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAF5F78B2F1A798800B1B01F /* Debug */,
+				FAF5F78C2F1A798800B1B01F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

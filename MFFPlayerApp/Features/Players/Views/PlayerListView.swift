@@ -1,87 +1,139 @@
-//
-//  PlayerListView.swift
-//  MFFPlayerApp
-//
-//  Created by Jonni Akesson on 2025-02-07.
-//
 
 import SwiftUI
 import SwiftData
 
+// MARK: - Main View
 struct PlayerListView: View {
-    @Query(sort: \PlayerEntity.name) private var storedPlayers: [PlayerEntity]
-    @State var viewModel: PlayerViewModel
-    @State private var showError = false // Local state to trigger alert
+    @State private var viewModel: PlayerViewModel
+    @Query private var players: [PlayerEntity]
     
+    init(viewModel: PlayerViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
-        List(storedPlayers) { player in
-            NavigationLink(destination: PlayerDetailView(player: player, viewModel: viewModel)) {
-                HStack(spacing: 12) {
-                    // Player Image
-                    AsyncImage(url: URL(string: player.image)) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        } else if phase.error != nil {
-                            Image(systemName: "person.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(.gray)
-                                .frame(width: 50, height: 50)
-                                .background(Color(.systemGray6))
-                                .clipShape(Circle())
-                        } else {
-                            ProgressView()
-                                .frame(width: 50, height: 50)
-                        }
-                    }
-                    
-                    // Player Info
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(player.name)
-                            .font(.body)
-                            .foregroundColor(.primary)
+        ZStack {
+            // Background
+            Color.mffBackgroundDark.ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // Header
+                headerView
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        // Section: Toppspelare (Carousel)
+                        topPlayersSection
                         
-                        if !player.number.isEmpty {
-                            Text("#\(player.number)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
+                        // Section: Hela Truppen (List)
+                        allPlayersSection
                     }
+                    .padding(.bottom, 100) // Space for bottom nav
                 }
-                .padding(.vertical, 4)
             }
-        }
-        .listStyle(.plain)
-        .refreshable {
-            await viewModel.checkForUpdates()
+            
+            // Bottom Navigation Overlay
+            VStack {
+                Spacer()
+                CustomBottomBar()
+            }
+            .ignoresSafeArea(edges: .bottom)
         }
         .task {
             await viewModel.loadPlayers()
         }
-        // ✅ Error Handling
-        .onChange(of: viewModel.errorMessage) { oldValue, newValue in
-            if newValue != nil {
-                showError = true
+    }
+    
+    // MARK: - Components
+    
+    private var headerView: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("HERRLAGET")
+                    .font(.system(size: 20, weight: .black, design: .default)) // Replicating "extrabold italic" roughly
+                    .italic()
+                    .foregroundColor(.white)
+                
+                Text("MATCHDAG · 19:00")
+                    .font(.system(size: 10, weight: .bold))
+                    .tracking(1.5)
+                    .foregroundColor(.mffPrimary)
+            }
+            
+            Spacer()
+            
+            HStack(spacing: 8) {
+                CircleButton(iconName: "bell.fill")
+                CircleButton(iconName: "magnifyingglass")
             }
         }
-        .alert("Error", isPresented: $showError) {
-            Button("OK") {
-                viewModel.errorMessage = nil
+        .padding(.horizontal, 24)
+        .padding(.vertical, 16)
+        .background(Color.mffBackgroundDark.opacity(0.8))
+    }
+    
+    private var topPlayersSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .bottom) {
+                Text("Dina favoritspelare")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button("Se alla") {
+                    // Action
+                }
+                .font(.caption)
+                .fontWeight(.bold)
+                .foregroundColor(.mffPrimary)
             }
-        } message: {
-            Text(viewModel.errorMessage ?? "Unknown error")
-        }
-        .overlay {
-            if viewModel.isLoading && storedPlayers.isEmpty {
-                ProgressView("Loading players...")
+            .padding(.horizontal, 24)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    // Using first few players as "Top Players" for demo
+                    ForEach(players.prefix(3)) { player in
+                        TopPlayerCard(player: player)
+                    }
+                }
+                .padding(.horizontal, 24)
             }
         }
     }
+    
+    private var allPlayersSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("Hela Truppen")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button(action: {}) {
+                    Image(systemName: "line.3.horizontal.decrease")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.gray)
+                        .padding(8)
+                        .background(Color.mffSurfaceDark)
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                }
+            }
+            .padding(.horizontal, 24)
+            
+            VStack(spacing: 12) {
+                ForEach(players) { player in
+                    PlayerRowCard(player: player)
+                }
+            }
+            .padding(.horizontal, 24)
+        }
+    }
 }
-
-// PlayerCardView removed in favor of inline List row for simplicity
