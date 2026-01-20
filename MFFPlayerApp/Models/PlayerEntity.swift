@@ -22,6 +22,13 @@ final class PlayerEntity: Identifiable {
     /// URL or file path for the player's image.
     var image: String
     
+    /// Stored binary data for the image (for offline use).
+    @Attribute(.externalStorage) // Store large data externally to keep DB fast
+    var imageData: Data?
+    
+    /// Whether the player is marked as a favorite.
+    var isFavorite: Bool = false
+    
     // Details
     var bio: String?
     var dob: String?
@@ -41,7 +48,7 @@ final class PlayerEntity: Identifiable {
     ///   - name: Player's full name.
     ///   - number: Jersey number.
     ///   - image: URL or file path for the player's image.
-    init(id: String, name: String, number: String, image: String, 
+    init(id: String, name: String, number: String, image: String, imageData: Data? = nil, isFavorite: Bool = false,
          bio: String? = nil, dob: String? = nil, position: String? = nil,
          stats_games: Int? = nil, stats_goals: Int? = nil, stats_assists: Int? = nil,
          stats_yellow: Int? = nil, stats_red: Int? = nil) {
@@ -49,6 +56,8 @@ final class PlayerEntity: Identifiable {
         self.name = name
         self.number = number
         self.image = image
+        self.imageData = imageData
+        self.isFavorite = isFavorite
         self.bio = bio
         self.dob = dob
         self.position = position

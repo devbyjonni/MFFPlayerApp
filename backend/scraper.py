@@ -78,13 +78,23 @@ def get_players():
                     if not any(p['details_url'] == href for p in players):
                         players.append({
                             "name": name,
-                            "number": number, # Default to empty if not found
+                            "number": number,
                             "image": image_url,
                             "details_url": href
                         })
 
-        logger.info(f"Found {len(players)} players.")
-        return players
+        logger.info(f"Found {len(players)} players. Fetching details for each...")
+        
+        # Enrich with details immediately
+        full_players = []
+        for p in players:
+            logger.info(f"Scraping details for {p['name']}...")
+            details = get_player_details(p['details_url'])
+            if details:
+                p.update(details)
+            full_players.append(p)
+            
+        return full_players
 
     except Exception as e:
         logger.error(f"Error scraping players: {e}")

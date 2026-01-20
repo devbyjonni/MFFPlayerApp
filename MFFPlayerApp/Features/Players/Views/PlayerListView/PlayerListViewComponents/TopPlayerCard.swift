@@ -3,33 +3,42 @@ import SwiftUI
 
 struct TopPlayerCard: View {
     let player: PlayerEntity
+    let onToggleFavorite: () -> Void
     
     var body: some View {
         ZStack(alignment: .bottom) {
             // Background Image
-            AsyncImage(url: URL(string: player.image)) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
+            Group {
+                if let imageData = player.imageData {
+                    StoredImage(data: imageData)
+                        .frame(width: 320, height: 420) // Updated frame match
+                        .clipped()
                 } else {
-                    Color.gray // Placeholder
+                    AsyncImage(url: URL(string: player.image)) { phase in
+                        if let image = phase.image {
+                            image.resizable().aspectRatio(contentMode: .fill)
+                        } else {
+                            Color.mffSurfaceDark
+                        }
+                    }
+                    .frame(width: 320, height: 420) // Updated frame match
+                    .clipped()
                 }
             }
-            .frame(width: 320, height: 420)
-            .clipped()
             .overlay(
-                Image(systemName: "heart.fill")
-                    .foregroundColor(.mffPrimary)
-                    .font(.system(size: 16)) // Smaller icon
-                    .padding(12)
-                    .background(Color.mffBackgroundDark.opacity(0.8)) // Back to the darker 0.8
-                    .clipShape(Circle()) // "Pill" shape for icon
-                    .overlay(
-                        Circle()
-                            .stroke(Color.white.opacity(0.1), lineWidth: 1) // Subtle border
-                    )
-                    .padding(24),
+                Button(action: onToggleFavorite) {
+                    Image(systemName: player.isFavorite ? "heart.fill" : "heart")
+                        .foregroundColor(player.isFavorite ? .red : .mffPrimary)
+                        .font(.system(size: 20)) // Slightly larger for tap target
+                        .padding(12)
+                        .background(Color.mffBackgroundDark.opacity(0.8))
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        )
+                }
+                .padding(24),
                 alignment: .topTrailing
             )
             

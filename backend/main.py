@@ -16,6 +16,14 @@ class Player(BaseModel):
     number: str
     image: str
     details_url: str
+    bio: str = ""
+    dob: str = ""
+    position: str = ""
+    stats_games: int = 0
+    stats_goals: int = 0
+    stats_assists: int = 0
+    stats_yellow: int = 0
+    stats_red: int = 0
 
 class Token(BaseModel):
     access_token: str
@@ -30,29 +38,9 @@ def get_players():
     logger.info("Request received for /players")
     players = scraper.get_players()
     if not players:
-        raise HTTPException(status_code=500, detail="Failed to fetch players")
+        # In case of empty list, return empty rather than error if no players found
+        return []
     return players
-
-class PlayerDetailsRequest(BaseModel):
-    url: str
-
-class PlayerDetails(BaseModel):
-    bio: str
-    dob: str
-    position: str
-    stats_games: int
-    stats_goals: int
-    stats_assists: int
-    stats_yellow: int
-    stats_red: int
-
-@app.post("/players/details", response_model=PlayerDetails)
-def get_details(request: PlayerDetailsRequest):
-    logger.info(f"Request received for details: {request.url}")
-    details = scraper.get_player_details(request.url)
-    if not details:
-        raise HTTPException(status_code=500, detail="Failed to fetch details")
-    return details
 
 @app.post("/token", response_model=Token)
 def login():

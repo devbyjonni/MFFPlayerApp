@@ -11,12 +11,12 @@ import SwiftData
 @main
 struct MFFPlayerAppApp: App {
     let container: ModelContainer
-    private var databaseManager: DatabaseManager
+    @State private var dataLoader: PlayerListViewModel
     
     init() {
         do {
             container = try ModelContainer(for: PlayerEntity.self)
-            databaseManager = DatabaseManager(modelContainer: container)
+            _dataLoader = State(initialValue: PlayerListViewModel(modelContext: container.mainContext))
         } catch {
             fatalError("Failed to initialize ModelContainer: \(error)")
         }
@@ -26,15 +26,13 @@ struct MFFPlayerAppApp: App {
         WindowGroup {
             NavigationStack {
                 VStack {
-                    PlayerListView(viewModel: PlayerViewModel(databaseManager: databaseManager))
+                    PlayerListView()
                         .modelContainer(container)
                 }
                 .navigationTitle("MFF Players")
                 .navigationBarTitleDisplayMode(.inline)
-                .onAppear {
-                   // printDatabaseLocation()
-                }
-                .toolbar {
+                .task {
+                    await dataLoader.loadPlayers()
                 }
             }
         }
