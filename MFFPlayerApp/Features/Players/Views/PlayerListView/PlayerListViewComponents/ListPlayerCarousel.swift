@@ -25,7 +25,7 @@ struct ListPlayerCarousel: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(spotlightPlayers) { player in
-                            TopPlayerCard(player: player)
+                            CarouselPlayerCard(player: player)
                         }
                     }
                     .padding(.horizontal, 24)

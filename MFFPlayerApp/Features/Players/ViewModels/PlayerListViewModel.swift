@@ -83,7 +83,7 @@ final class PlayerListViewModel {
                     isSpotlight: spotlightIds.contains(player.id),
                     bio: player.bio,
                     dob: player.dob,
-                    position: player.position,
+                    position: (player.position?.isEmpty ?? true) ? nil : player.position,
                     stats_games: player.stats_games,
                     stats_goals: player.stats_goals,
                     stats_assists: player.stats_assists,
