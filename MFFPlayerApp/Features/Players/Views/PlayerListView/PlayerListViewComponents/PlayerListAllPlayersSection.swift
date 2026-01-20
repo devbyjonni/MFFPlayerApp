@@ -3,7 +3,7 @@ import SwiftUI
 
 struct PlayerListAllPlayersSection: View {
     @Query(sort: \PlayerEntity.number) private var players: [PlayerEntity]
-    @Binding var selectedCategory: PlayerCategory
+    @State private var selectedCategory: PlayerCategory = .all
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {

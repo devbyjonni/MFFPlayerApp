@@ -7,8 +7,6 @@ struct PlayerListView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var selectedCategory: PlayerCategory = .all
     
-    init() {}
-    
     var body: some View {
         ZStack {
             // Background
@@ -26,7 +24,7 @@ struct PlayerListView: View {
                         // Section: Hela Truppen (List)
                         PlayerListAllPlayersSection(selectedCategory: $selectedCategory)
                     }
-                    .padding(.bottom, 100) // Space for bottom nav
+                    .padding(.bottom, 100)
                 }
             }
             
