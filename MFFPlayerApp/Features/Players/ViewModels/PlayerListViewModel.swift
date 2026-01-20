@@ -29,6 +29,7 @@ final class PlayerListViewModel {
             let storedPlayers = try modelContext.fetch(descriptor)
             
             if !storedPlayers.isEmpty {
+                updateSpotlight()
                 return
             }
             
@@ -61,8 +62,9 @@ final class PlayerListViewModel {
             let descriptor = FetchDescriptor<PlayerEntity>()
             let existingPlayers = try modelContext.fetch(descriptor)
             
-            // Cache favorites
+            // Cache favorites and spotlight
             let favoriteIds = Set(existingPlayers.filter { $0.isFavorite }.map { $0.id })
+            let spotlightIds = Set(existingPlayers.filter { $0.isSpotlight }.map { $0.id })
             
             // Clear existing
             for player in existingPlayers {
@@ -78,6 +80,7 @@ final class PlayerListViewModel {
                     image: player.image,
                     imageData: nil,
                     isFavorite: favoriteIds.contains(player.id),
+                    isSpotlight: spotlightIds.contains(player.id),
                     bio: player.bio,
                     dob: player.dob,
                     position: player.position,
@@ -91,12 +94,40 @@ final class PlayerListViewModel {
             }
             try modelContext.save()
             
+            // Update spotlight if needed
+            updateSpotlight()
+            
             // Trigger background image download
             Task {
                 await downloadMissingImages()
             }
         } catch {
             handleError(error, message: "Failed to update players")
+        }
+    }
+    
+    private func updateSpotlight() {
+        do {
+            let descriptor = FetchDescriptor<PlayerEntity>()
+            let allPlayers = try modelContext.fetch(descriptor)
+            
+            // Check if we already have spotlight players
+            if !allPlayers.contains(where: { $0.isSpotlight }) {
+                print("PlayerViewModel: 🔦 Selecting new spotlight players...")
+                
+                // Reset (just in case)
+                for player in allPlayers { player.isSpotlight = false }
+                
+                // Pick 5 random
+                let randomPlayers = allPlayers.shuffled().prefix(5)
+                for player in randomPlayers {
+                    player.isSpotlight = true
+                }
+                
+                try modelContext.save()
+            }
+        } catch {
+            print("PlayerViewModel: ❌ Failed to update spotlight: \(error.localizedDescription)")
         }
     }
     

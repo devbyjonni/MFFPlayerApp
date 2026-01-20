@@ -3,7 +3,6 @@ import SwiftUI
 
 struct TopPlayerCard: View {
     let player: PlayerEntity
-    let onToggleFavorite: () -> Void
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -26,7 +25,7 @@ struct TopPlayerCard: View {
                 }
             }
             .overlay(
-                Button(action: onToggleFavorite) {
+                Button(action: { player.isFavorite.toggle() }) {
                     Image(systemName: player.isFavorite ? "heart.fill" : "heart")
                         .foregroundColor(player.isFavorite ? .red : .mffPrimary)
                         .font(.system(size: 20)) // Slightly larger for tap target

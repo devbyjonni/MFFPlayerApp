@@ -29,6 +29,9 @@ final class PlayerEntity: Identifiable {
     /// Whether the player is marked as a favorite.
     var isFavorite: Bool = false
     
+    /// Whether the player is currently in the spotlight.
+    var isSpotlight: Bool = false
+    
     // Details
     var bio: String?
     var dob: String?
@@ -48,7 +51,7 @@ final class PlayerEntity: Identifiable {
     ///   - name: Player's full name.
     ///   - number: Jersey number.
     ///   - image: URL or file path for the player's image.
-    init(id: String, name: String, number: String, image: String, imageData: Data? = nil, isFavorite: Bool = false,
+    init(id: String, name: String, number: String, image: String, imageData: Data? = nil, isFavorite: Bool = false, isSpotlight: Bool = false,
          bio: String? = nil, dob: String? = nil, position: String? = nil,
          stats_games: Int? = nil, stats_goals: Int? = nil, stats_assists: Int? = nil,
          stats_yellow: Int? = nil, stats_red: Int? = nil) {
@@ -58,6 +61,7 @@ final class PlayerEntity: Identifiable {
         self.image = image
         self.imageData = imageData
         self.isFavorite = isFavorite
+        self.isSpotlight = isSpotlight
         self.bio = bio
         self.dob = dob
         self.position = position
