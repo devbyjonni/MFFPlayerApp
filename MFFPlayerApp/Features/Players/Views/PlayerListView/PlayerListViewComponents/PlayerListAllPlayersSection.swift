@@ -1,10 +1,9 @@
-
+import SwiftData
 import SwiftUI
 
 struct PlayerListAllPlayersSection: View {
-    let players: [PlayerEntity]
+    @Query(sort: \PlayerEntity.number) private var players: [PlayerEntity]
     @Binding var selectedCategory: PlayerCategory
-    let onToggleFavorite: (PlayerEntity) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -23,9 +22,7 @@ struct PlayerListAllPlayersSection: View {
             
             LazyVStack(spacing: 12) {
                 ForEach(filteredPlayers) { player in
-                    PlayerRowCard(player: player, onToggleFavorite: {
-                        onToggleFavorite(player)
-                    })
+                    PlayerRowCard(player: player)
                 }
             }
             .padding(.horizontal, 24)

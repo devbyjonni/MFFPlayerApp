@@ -40,7 +40,8 @@ struct PlayerDetailView: View {
                                 .foregroundColor(.white)
                                 .shadow(color: .black, radius: 10)
                             
-                            Text(player.position?.uppercased() ?? "SPELARE")
+                            let category = PlayerCategory.from(position: player.position)
+                            Text(category == .all ? "SPELARE" : category.rawValue.uppercased())
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.mffPrimary)

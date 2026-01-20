@@ -18,10 +18,7 @@ struct PlayerListHeader: View {
             
             Spacer()
             
-            HStack(spacing: 8) {
-                CircleButton(iconName: "bell.fill")
-                CircleButton(iconName: "magnifyingglass")
-            }
+            CircleButton(iconName: "magnifyingglass")
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 16)

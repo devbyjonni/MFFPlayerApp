@@ -3,7 +3,6 @@ import SwiftUI
 
 struct PlayerRowCard: View {
     let player: PlayerEntity
-    let onToggleFavorite: () -> Void
     
     var body: some View {
         NavigationLink(destination: PlayerDetailView(player: player)) {
@@ -61,7 +60,7 @@ struct PlayerRowCard: View {
                 // Right Side: Number & Mini Stats
                 VStack(alignment: .trailing, spacing: 8) {
                     // Heart Button
-                    Button(action: onToggleFavorite) {
+                    Button(action: { player.isFavorite.toggle() }) {
                         Image(systemName: player.isFavorite ? "heart.fill" : "heart")
                             .font(.system(size: 20))
                             .foregroundColor(player.isFavorite ? .red : .gray.opacity(0.5))
@@ -76,18 +75,9 @@ struct PlayerRowCard: View {
                     
                     // Stats Indicator
                     HStack(spacing: 12) {
-                        if (player.stats_yellow ?? 0) > 0 || (player.stats_red ?? 0) > 0 {
-                            HStack(spacing: 4) {
-                                CardCount(color: .mffAccentYellow, count: player.stats_yellow ?? 0)
-                                CardCount(color: .mffAccentRed, count: player.stats_red ?? 0)
-                            }
-                        }
-                        
-                        // Form Dots (Mock)
                         HStack(spacing: 4) {
-                            Circle().fill(Color.mffAccentGreen).frame(width: 6, height: 6)
-                            Circle().fill(Color.mffAccentGreen).frame(width: 6, height: 6)
-                            Circle().fill(Color.gray).frame(width: 6, height: 6)
+                            CardCount(color: .mffAccentYellow, count: player.stats_yellow ?? 0)
+                            CardCount(color: .mffAccentRed, count: player.stats_red ?? 0)
                         }
                     }
                 }

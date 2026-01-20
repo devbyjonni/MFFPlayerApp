@@ -8,16 +8,6 @@ struct ListPlayerCarousel: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .bottom) {
-                Text("I Rampljuset")
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                
-                Spacer()
-            }
-            .padding(.horizontal, 24)
-            
             if spotlightPlayers.isEmpty {
                 // Should only happen if database is empty or spotlight hasn't run yet
                 EmptyView()

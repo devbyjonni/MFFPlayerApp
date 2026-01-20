@@ -35,6 +35,7 @@ struct MFFPlayerAppApp: App {
                     await dataLoader.loadPlayers()
                 }
             }
+            .onAppear(perform: printDatabaseLocation)
         }
     }
     

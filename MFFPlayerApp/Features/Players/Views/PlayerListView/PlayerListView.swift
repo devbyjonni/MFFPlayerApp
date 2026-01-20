@@ -5,7 +5,6 @@ import SwiftData
 // MARK: - Main View
 struct PlayerListView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var players: [PlayerEntity]
     @State private var selectedCategory: PlayerCategory = .all
     
     init() {}
@@ -25,9 +24,7 @@ struct PlayerListView: View {
                         ListPlayerCarousel()
                         
                         // Section: Hela Truppen (List)
-                        PlayerListAllPlayersSection(players: players, selectedCategory: $selectedCategory) { player in
-                            toggleFavorite(player)
-                        }
+                        PlayerListAllPlayersSection(selectedCategory: $selectedCategory)
                     }
                     .padding(.bottom, 100) // Space for bottom nav
                 }
@@ -40,15 +37,5 @@ struct PlayerListView: View {
             }
             .ignoresSafeArea(edges: .bottom)
         }
-    }
-    
-    // MARK: - Components
-    
-
-    
-
-    
-    private func toggleFavorite(_ player: PlayerEntity) {
-        player.isFavorite.toggle()
     }
 }
