@@ -4,6 +4,8 @@
 
 A **native iOS application** built with modern Swift technologies to track Malmö FF players, designed with scalable architecture and premium UI in mind.
 
+![MFF Player App Showcase](screenshots/Showcase.png)
+
 ## Features
 - **Live Scraping**: Python backend extracts real-time player data from MFF.se.
 - **On-Demand Details**: Fetches detailed biography, age, position, and season statistics (Games, Goals, Cards).

@@ -20,15 +20,11 @@ struct CarouselPlayerCard: View {
                 .overlay(
                     Button(action: { player.isFavorite.toggle() }) {
                         Image(systemName: player.isFavorite ? "heart.fill" : "heart")
-                            .foregroundColor(player.isFavorite ? .red : .mffPrimary)
-                            .font(.system(size: 20)) // Slightly larger for tap target
-                            .padding(12)
-                            .background(Color.mffBackgroundDark.opacity(0.8))
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                            )
+                            .foregroundColor(.mffPrimary)
+                            .font(.system(size: 20))
+                            .padding(10)
+                            .background(Circle().fill(.white))
+                            .shadow(color: .black.opacity(0.15), radius: 4, x: 0, y: 2)
                     }
                     .buttonStyle(PlainButtonStyle()) // Prevent list/nav click capture
                     .padding(24),
@@ -48,8 +44,9 @@ struct CarouselPlayerCard: View {
                 
                 // Content
                 VStack(alignment: .leading, spacing: 0) {
-                    // Header (Badge Only)
-                    HStack(alignment: .top) {
+                    // Main Content Block
+                    VStack(alignment: .leading, spacing: -4) {
+                        // Position Badge
                         Text(player.position ?? "")
                             .font(.system(size: 10, weight: .black))
                             .padding(.horizontal, 10)
@@ -57,14 +54,17 @@ struct CarouselPlayerCard: View {
                             .background(Color.mffPrimary)
                             .foregroundColor(.mffBackgroundDark)
                             .clipShape(Capsule())
+                            .padding(.leading, 2) // Slight offset to align with number slant
                         
-                        Spacer()
-                    }
-                    .padding(.bottom, 4)
-                    
-                    HStack(alignment: .bottom) {
-                        // Name and Stars
-                        VStack(alignment: .leading, spacing: 4) {
+                        HStack(alignment: .bottom, spacing: 12) {
+                            // Big Number (Leading)
+                            Text(player.number)
+                                .font(.system(size: 80, weight: .black))
+                                .italic()
+                                .foregroundColor(.mffPrimary)
+                                .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
+                            
+                            // Name Stack (Trailing)
                             VStack(alignment: .leading, spacing: -6) {
                                 let nameComponents = player.name.split(separator: " ")
                                 let firstName = nameComponents.dropLast().joined(separator: " ")
@@ -72,34 +72,25 @@ struct CarouselPlayerCard: View {
                                 
                                 if !firstName.isEmpty {
                                     Text(firstName.uppercased())
-                                        .font(.system(size: 32, weight: .heavy))
+                                        .font(.system(size: 28, weight: .black))
                                         .italic()
                                         .foregroundColor(.white)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.5)
+                                        .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
                                 }
                                 Text(lastName.uppercased())
-                                    .font(.system(size: 32, weight: .heavy))
-                                        .italic()
-                                        .foregroundColor(.white)
+                                    .font(.system(size: 28, weight: .black))
+                                    .italic()
+                                    .foregroundColor(.white)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                    .shadow(color: .black.opacity(0.5), radius: 2, x: 1, y: 1)
                             }
+                            .padding(.bottom, 15) // Optical alignment with number baseline
                             
-                            // Gold Stars
-                            HStack(spacing: 4) {
-                                Image(systemName: "star.fill")
-                                Image(systemName: "star.fill")
-                            }
-                            .font(.system(size: 14))
-                            .foregroundColor(Color(hex: "FFD700")) // Gold color
-                            .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                            Spacer()
                         }
-                        
-                        Spacer()
-                        
-                        // Big Number
-                        Text(player.number)
-                            .font(.system(size: 56, weight: .heavy))
-                            .italic()
-                            .foregroundColor(.mffPrimary) // Solid Blue
-                            .offset(y: 10)
                     }
                     .padding(.bottom, 16)
                     
