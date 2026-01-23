@@ -5,11 +5,8 @@ struct PlayerRowCard: View {
     let player: PlayerEntity
     
     var body: some View {
-        NavigationLink(destination: PlayerDetailView(player: player)) {
+        NavigationLink(value: player) {
             HStack(spacing: 16) {
-                // ... (existing content)
-                
-                // Avatar (Taller Portrait)
                 Group {
                     if let imageData = player.imageData {
                         StoredImage(data: imageData)
@@ -28,21 +25,21 @@ struct PlayerRowCard: View {
                 )
                 
                 // Info
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     // Name Split (Sporty Style)
                     let nameComponents = player.name.split(separator: " ")
                     let firstName = nameComponents.dropLast().joined(separator: " ")
                     let lastName = nameComponents.last ?? ""
+                    Text(firstName.uppercased())
+                        .font(.system(size: 14, weight: .heavy))
+                        .italic()
+                        .foregroundColor(.white.opacity(0.8))
                     
-                    if !firstName.isEmpty {
-                        Text(firstName.uppercased())
-                            .font(.system(size: 14, weight: .heavy))
-                            .italic()
-                            .foregroundColor(.white.opacity(0.8))
-                    }
                     Text(lastName.uppercased())
                         .font(.system(size: 20, weight: .black))
                         .italic()
+                        .foregroundColor(.white)
+                        .offset(x: -2)
                     // Position Badge
                     let position = player.position?.trimmingCharacters(in: .whitespaces) ?? ""
                     Text((position.isEmpty ? "MFF SPELARE" : position).uppercased())
@@ -52,33 +49,31 @@ struct PlayerRowCard: View {
                         .background(Color.mffPrimary.opacity(0.2))
                         .foregroundColor(.mffPrimary)
                         .clipShape(Capsule())
+                        .offset(x: -4)
                         .padding(.top, 4)
+                    // Stats Indicator
+                    HStack(spacing: 4) {
+                        CardCount(color: .mffAccentYellow, count: player.stats_yellow ?? 0)
+                        CardCount(color: .mffAccentRed, count: player.stats_red ?? 0)
+                    }
+                    .offset(x: 4)
+                    .padding(.top, 6)
                 }
                 
                 Spacer()
                 
                 // Right Side: Number & Mini Stats
                 VStack(alignment: .trailing, spacing: 8) {
-                    // Heart Button
-                    Button(action: { player.isFavorite.toggle() }) {
-                        Image(systemName: player.isFavorite ? "heart.fill" : "heart")
-                            .font(.system(size: 20))
-                            .foregroundColor(player.isFavorite ? .red : .gray.opacity(0.5))
-                    }
-                    .padding(.bottom, 4)
-                    .buttonStyle(PlainButtonStyle()) // Important within NavLink
                     
                     Text(player.number)
                         .font(.system(size: 32, weight: .black))
                         .italic()
                         .foregroundColor(.mffPrimary)
-                    
-                    // Stats Indicator
-                    HStack(spacing: 12) {
-                        HStack(spacing: 4) {
-                            CardCount(color: .mffAccentYellow, count: player.stats_yellow ?? 0)
-                            CardCount(color: .mffAccentRed, count: player.stats_red ?? 0)
-                        }
+                    Spacer()
+                    Button(action: { player.isFavorite.toggle() }) {
+                        Image(systemName: player.isFavorite ? "star.fill" : "star")
+                            .font(.system(size: 20))
+                            .foregroundColor(player.isFavorite ? .yellow : .gray.opacity(0.5))
                     }
                 }
             }
@@ -100,49 +95,25 @@ struct PlayerRowCard: View {
     }
 }
 
-// Helper for off-thread image decoding
-struct StoredImage: View {
-    let data: Data
-    @State private var image: UIImage?
-    
-    var body: some View {
-        Group {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } else {
-                Color.mffSurfaceDark
-            }
-        }
-        .task {
-            // Decode off main thread to prevent scroll hitching
-            if image == nil {
-                image = await Task.detached(priority: .userInitiated) {
-                    UIImage(data: data)
-                }.value
-            }
-        }
-    }
-}
+
 
 struct CardCount: View {
     let color: Color
     let count: Int
     
     var body: some View {
-        HStack(spacing: 2) {
+        HStack(spacing: 4) {
             RoundedRectangle(cornerRadius: 2)
                 .fill(color)
-                .frame(width: 8, height: 12)
+                .frame(width: 10, height: 14)
                 .overlay(
                     RoundedRectangle(cornerRadius: 2)
                         .stroke(Color.black.opacity(0.2), lineWidth: 1)
                 )
             
             Text("\(count)")
-                .font(.system(size: 10, weight: .bold))
-                .foregroundColor(.gray)
+                .font(.system(size: 12, weight: .bold))
+                .foregroundColor(.white.opacity(0.7))
         }
     }
 }

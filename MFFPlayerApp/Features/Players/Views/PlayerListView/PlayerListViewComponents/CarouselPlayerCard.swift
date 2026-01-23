@@ -5,7 +5,7 @@ struct CarouselPlayerCard: View {
     let player: PlayerEntity
     
     var body: some View {
-        NavigationLink(destination: PlayerDetailView(player: player)) {
+        NavigationLink(value: player) {
             ZStack(alignment: .bottom) {
                 // Background Image
                 Group {
@@ -50,7 +50,7 @@ struct CarouselPlayerCard: View {
                 VStack(alignment: .leading, spacing: 0) {
                     // Header (Badge Only)
                     HStack(alignment: .top) {
-                        Text(player.position ?? "NDA")
+                        Text(player.position ?? "")
                             .font(.system(size: 10, weight: .black))
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)

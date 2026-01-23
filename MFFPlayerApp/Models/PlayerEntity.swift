@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class PlayerEntity: Identifiable {
+final class PlayerEntity: Identifiable, Hashable {
     /// Unique identifier for the player.
     var id: String
     
@@ -70,5 +70,15 @@ final class PlayerEntity: Identifiable {
         self.stats_assists = stats_assists
         self.stats_yellow = stats_yellow
         self.stats_red = stats_red
+    }
+
+    // MARK: - Hashable & Equatable
+    // Required for NavigationLink(value:)
+    static func == (lhs: PlayerEntity, rhs: PlayerEntity) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

@@ -4,9 +4,6 @@ import SwiftData
 
 // MARK: - Main View
 struct PlayerListView: View {
-    @Environment(\.modelContext) private var modelContext
-    @State private var selectedCategory: PlayerCategory = .all
-    
     var body: some View {
         ZStack {
             // Background
@@ -20,18 +17,14 @@ struct PlayerListView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         // Section: Toppspelare (Carousel)
                         ListPlayerCarousel()
-                        
                         // Section: Hela Truppen (List)
-                        PlayerListAllPlayersSection(selectedCategory: $selectedCategory)
+                        PlayerListAllPlayersSection()
                     }
                     .padding(.bottom, 100)
                 }
             }
-            
-            // Bottom Navigation Overlay
-            VStack {
-                Spacer()
-                CustomBottomBar()
+            .overlay(alignment: .bottom) {
+                CustomTabBar()
             }
             .ignoresSafeArea(edges: .bottom)
         }

@@ -8,7 +8,7 @@ struct PlayerListAllPlayersSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Hela Truppen")
+                Text("Truppen")
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -20,6 +20,7 @@ struct PlayerListAllPlayersSection: View {
             // Filter Bar
             PlayerListFilterBar(selectedCategory: $selectedCategory)
             
+            // List
             LazyVStack(spacing: 12) {
                 ForEach(filteredPlayers) { player in
                     PlayerRowCard(player: player)

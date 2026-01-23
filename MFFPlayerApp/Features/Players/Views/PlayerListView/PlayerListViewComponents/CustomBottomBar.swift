@@ -1,7 +1,7 @@
 
 import SwiftUI
 
-struct CustomBottomBar: View {
+struct CustomTabBar: View {
     var body: some View {
         HStack(spacing: 0) {
             NavBarItem(icon: "house.fill", title: "HEM", isSelected: true)
@@ -10,7 +10,7 @@ struct CustomBottomBar: View {
             NavBarItem(icon: "person.circle.fill", title: "PROFIL", isSelected: false)
         }
         .padding(.top, 16)
-        .padding(.bottom, 32)
+        .padding(.bottom, 16)
         .background(
             Color.mffBackgroundDark.opacity(0.95)
                 .background(.ultraThinMaterial)
@@ -21,7 +21,6 @@ struct CustomBottomBar: View {
                 .foregroundColor(Color.white.opacity(0.1)),
             alignment: .top
         )
-        .frame(maxWidth: 450) // Restrict width on iPad/Desktop
     }
 }
 
@@ -42,5 +41,3 @@ struct NavBarItem: View {
         .frame(maxWidth: .infinity)
     }
 }
-
-

@@ -28,6 +28,9 @@ struct MFFPlayerAppApp: App {
                 VStack {
                     PlayerListView()
                         .modelContainer(container)
+                        .navigationDestination(for: PlayerEntity.self) { player in
+                            PlayerDetailView(player: player)
+                        }
                 }
                 .navigationTitle("MFF Players")
                 .navigationBarTitleDisplayMode(.inline)
