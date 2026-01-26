@@ -63,8 +63,8 @@ struct PlayerRowCard: View {
                         // 3. Stats Zone (Pill)
                         HStack(spacing: 8) {
                             HStack(spacing: 6) {
-                                CardCount(color: .yellow, count: player.stats_yellow ?? 0)
-                                CardCount(color: .red, count: player.stats_red ?? 0)
+                                CardCount(color: .yellow, count: player.statsYellow ?? 0)
+                                CardCount(color: .red, count: player.statsRed ?? 0)
                             }
                         }
                         .padding(.top, 6)

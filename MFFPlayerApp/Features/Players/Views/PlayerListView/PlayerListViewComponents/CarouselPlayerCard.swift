@@ -96,9 +96,9 @@ struct CarouselPlayerCard: View {
                     
                     // Stats Row
                     HStack(spacing: 8) {
-                        CarouselStatSlot(value: "\(player.stats_games ?? 0)", label: "MATCHER")
-                        CarouselStatSlot(value: "\(player.stats_goals ?? 0)", label: "MÅL")
-                        CarouselStatSlot(value: "\(player.stats_assists ?? 0)", label: "ASSISTS")
+                        CarouselStatSlot(value: "\(player.statsGames ?? 0)", label: "MATCHER")
+                        CarouselStatSlot(value: "\(player.statsGoals ?? 0)", label: "MÅL")
+                        CarouselStatSlot(value: "\(player.statsAssists ?? 0)", label: "ASSISTS")
                     }
                 }
                 .padding(24)

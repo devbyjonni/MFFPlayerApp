@@ -20,7 +20,7 @@ class MockAPIService: APIServiceProtocol {
         
         // Return dummy data (assuming T is [Player])
         if T.self == [Player].self {
-            let player = Player(name: "Test Player", number: "10", image: "img.jpg", details_url: "url")
+            let player = Player(name: "Test Player", number: "10", image: "img.jpg", detailsUrl: "url")
             return [player] as! T
         }
         
@@ -35,11 +35,11 @@ class MockAPIService: APIServiceProtocol {
             bio: "Test Bio", 
             dob: "1990-01-01", 
             position: "Forward",
-            stats_games: 10,
-            stats_goals: 5,
-            stats_assists: 2,
-            stats_yellow: 1,
-            stats_red: 0
+            statsGames: 10,
+            statsGoals: 5,
+            statsAssists: 2,
+            statsYellow: 1,
+            statsRed: 0
         )
     }
 }

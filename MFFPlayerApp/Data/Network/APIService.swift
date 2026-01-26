@@ -48,11 +48,20 @@ struct PlayerDetails: Decodable {
     let position: String
     
     // Stats
-    let stats_games: Int
-    let stats_goals: Int
-    let stats_assists: Int
-    let stats_yellow: Int
-    let stats_red: Int
+    let statsGames: Int
+    let statsGoals: Int
+    let statsAssists: Int
+    let statsYellow: Int
+    let statsRed: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case bio, dob, position
+        case statsGames = "stats_games"
+        case statsGoals = "stats_goals"
+        case statsAssists = "stats_assists"
+        case statsYellow = "stats_yellow"
+        case statsRed = "stats_red"
+    }
 }
 
 // MARK: - API Service

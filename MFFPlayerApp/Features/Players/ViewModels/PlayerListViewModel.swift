@@ -84,11 +84,11 @@ final class PlayerListViewModel {
                     bio: player.bio,
                     dob: player.dob,
                     position: (player.position?.isEmpty ?? true) ? nil : player.position,
-                    stats_games: player.stats_games,
-                    stats_goals: player.stats_goals,
-                    stats_assists: player.stats_assists,
-                    stats_yellow: player.stats_yellow,
-                    stats_red: player.stats_red
+                    statsGames: player.statsGames,
+                    statsGoals: player.statsGoals,
+                    statsAssists: player.statsAssists,
+                    statsYellow: player.statsYellow,
+                    statsRed: player.statsRed
                 )
                 modelContext.insert(playerEntity)
             }

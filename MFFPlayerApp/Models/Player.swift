@@ -11,11 +11,11 @@ import Foundation
 
 /// Represents a player as returned by the API.
 struct Player: Codable, Identifiable {
-    var id: String { details_url }
+    var id: String { detailsUrl }
     let name: String
     let number: String
     let image: String
-    let details_url: String
+    let detailsUrl: String
     
     // Detailed Info (Optional, fetched on demand)
     var bio: String?
@@ -23,9 +23,20 @@ struct Player: Codable, Identifiable {
     var position: String?
     
     // Stats
-    var stats_games: Int?
-    var stats_goals: Int?
-    var stats_assists: Int?
-    var stats_yellow: Int?
-    var stats_red: Int?
+    var statsGames: Int?
+    var statsGoals: Int?
+    var statsAssists: Int?
+    var statsYellow: Int?
+    var statsRed: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case name, number, image
+        case detailsUrl = "details_url"
+        case bio, dob, position
+        case statsGames = "stats_games"
+        case statsGoals = "stats_goals"
+        case statsAssists = "stats_assists"
+        case statsYellow = "stats_yellow"
+        case statsRed = "stats_red"
+    }
 }

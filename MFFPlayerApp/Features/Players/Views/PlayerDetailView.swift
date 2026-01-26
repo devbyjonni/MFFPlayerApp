@@ -64,14 +64,14 @@ struct PlayerDetailView: View {
                 VStack(spacing: 32) {
                     // Stats Grid
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                        DetailStatCard(value: "\(player.stats_games ?? 0)", label: "MATCHER")
-                        DetailStatCard(value: "\(player.stats_goals ?? 0)", label: "MÅL")
-                        DetailStatCard(value: "\(player.stats_assists ?? 0)", label: "ASSISTS")
+                        DetailStatCard(value: "\(player.statsGames ?? 0)", label: "MATCHER")
+                        DetailStatCard(value: "\(player.statsGoals ?? 0)", label: "MÅL")
+                        DetailStatCard(value: "\(player.statsAssists ?? 0)", label: "ASSISTS")
                         
                         // Cards (Combined)
                         HStack(spacing: 12) {
-                            CardCount(color: .mffAccentYellow, count: player.stats_yellow ?? 0)
-                            CardCount(color: .mffAccentRed, count: player.stats_red ?? 0)
+                            CardCount(color: .mffAccentYellow, count: player.statsYellow ?? 0)
+                            CardCount(color: .mffAccentRed, count: player.statsRed ?? 0)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 100)

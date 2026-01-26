@@ -38,11 +38,11 @@ final class PlayerEntity: Identifiable, Hashable {
     var position: String?
     
     // Stats
-    var stats_games: Int?
-    var stats_goals: Int?
-    var stats_assists: Int?
-    var stats_yellow: Int?
-    var stats_red: Int?
+    var statsGames: Int?
+    var statsGoals: Int?
+    var statsAssists: Int?
+    var statsYellow: Int?
+    var statsRed: Int?
     
     /// Initializes a new `PlayerEntity` instance.
     ///
@@ -53,8 +53,8 @@ final class PlayerEntity: Identifiable, Hashable {
     ///   - image: URL or file path for the player's image.
     init(id: String, name: String, number: String, image: String, imageData: Data? = nil, isFavorite: Bool = false, isSpotlight: Bool = false,
          bio: String? = nil, dob: String? = nil, position: String? = nil,
-         stats_games: Int? = nil, stats_goals: Int? = nil, stats_assists: Int? = nil,
-         stats_yellow: Int? = nil, stats_red: Int? = nil) {
+         statsGames: Int? = nil, statsGoals: Int? = nil, statsAssists: Int? = nil,
+         statsYellow: Int? = nil, statsRed: Int? = nil) {
         self.id = id
         self.name = name
         self.number = number
@@ -65,11 +65,11 @@ final class PlayerEntity: Identifiable, Hashable {
         self.bio = bio
         self.dob = dob
         self.position = position
-        self.stats_games = stats_games
-        self.stats_goals = stats_goals
-        self.stats_assists = stats_assists
-        self.stats_yellow = stats_yellow
-        self.stats_red = stats_red
+        self.statsGames = statsGames
+        self.statsGoals = statsGoals
+        self.statsAssists = statsAssists
+        self.statsYellow = statsYellow
+        self.statsRed = statsRed
     }
 
     // MARK: - Hashable & Equatable
